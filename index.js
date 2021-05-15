@@ -1,24 +1,35 @@
-const _ = require('lodash');
 const fs = require('fs');
 
-//JSON
+//Please require lodash utils functions only in modular way to
+const _transform = require('lodash').transform;
+const _isEqual = require('lodash').isEqual;
+const _isObject = require('lodash').isObject;
+const _isArray = require('lodash').isArray;
+
+//JSON fetching
 let originalJSON = fs.readFileSync('./json_samples/original.json');
 let modifiedJSON = fs.readFileSync('./json_samples/modified.json');
 
-//Object
+//JSON to Object Conversion
 let originalObject = JSON.parse(originalJSON);
 let modifiedObject = JSON.parse(modifiedJSON);
 
+/**
+ * Function difference is used to generate diff object between the two object according structure
+ * @param {*} originalObject
+ * @param {*} modifiedObject
+ * @returns Object
+ */
 const difference = (originalObject, modifiedObject) => {
 	const changes = (modifiedObject, originalObject) => {
 		let arrayIndexCounter = 0;
-		return _.transform(modifiedObject, function (result, value, key) {
-			if (!_.isEqual(value, originalObject[key])) {
-				let resultKey = _.isArray(originalObject)
+		return _transform(modifiedObject, function (result, value, key) {
+			if (!_isEqual(value, originalObject[key])) {
+				let resultKey = _isArray(originalObject)
 					? arrayIndexCounter++
 					: key;
 				result[resultKey] =
-					_.isObject(value) && _.isObject(originalObject[key])
+					_isObject(value) && _isObject(originalObject[key])
 						? changes(value, originalObject[key])
 						: value;
 			}

@@ -1,14 +1,16 @@
 const _ = require('lodash');
 const fs = require('fs');
 
+//JSON
 let originalJSON = fs.readFileSync('./json_samples/original.json');
 let modifiedJSON = fs.readFileSync('./json_samples/modified.json');
 
+//Object
 let originalObject = JSON.parse(originalJSON);
 let modifiedObject = JSON.parse(modifiedJSON);
 
-function difference(originalObject, modifiedObject) {
-	function changes(modifiedObject, originalObject) {
+const difference = (originalObject, modifiedObject) => {
+	const changes = (modifiedObject, originalObject) => {
 		let arrayIndexCounter = 0;
 		return _.transform(modifiedObject, function (result, value, key) {
 			if (!_.isEqual(value, originalObject[key])) {
@@ -21,9 +23,9 @@ function difference(originalObject, modifiedObject) {
 						: value;
 			}
 		});
-	}
+	};
 	return changes(modifiedObject, originalObject);
-}
+};
 
 const differenceObject = difference(originalObject, modifiedObject);
 //console.log(differenceObject);
